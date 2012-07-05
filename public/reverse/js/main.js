@@ -25,7 +25,10 @@
         try {
           buffer = ctx.createBuffer(e.target.result, true).getChannelData(0);
           synth.buffer = buffer;
-          return $("#text").text("逆再生します.");
+          $("#text").text("逆再生を開始します.");
+          return setTimeout(function() {
+            return $("#text").text("音楽ファイルをドラッグ & ドロップすると逆再生します.");
+          }, 5000);
         } catch (e) {
           return $("#text").text("再生できないファイルです.");
         }
@@ -33,7 +36,7 @@
       return reader.readAsArrayBuffer(file);
     });
     if (timbre.env === "webkit") {
-      return $("#text").text("ドラッグ & ドロップで逆再生します.");
+      return $("#text").text("音楽ファイルをドラッグ & ドロップすると逆再生します.");
     } else {
       return $("#text").text("Chrome で開いてね!!");
     }
