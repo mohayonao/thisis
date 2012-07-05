@@ -14,8 +14,6 @@ jQuery ->
         e.preventDefault()
         e.stopPropagation()
 
-        file = e.originalEvent.dataTransfer.files[0]
-
         reader = new FileReader()
         reader.onload = (e)->
             try
@@ -27,7 +25,7 @@ jQuery ->
                 , 5000
             catch e
                 $("#text").text "再生できないファイルです."
-        reader.readAsArrayBuffer file
+        reader.readAsArrayBuffer e.originalEvent.dataTransfer.files[0]
 
     if timbre.env is "webkit"
         $("#text").text "音楽ファイルをドラッグ & ドロップすると逆再生します."

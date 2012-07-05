@@ -15,10 +15,9 @@
       return e.stopPropagation();
     });
     $body.on("drop", function(e) {
-      var file, reader;
+      var reader;
       e.preventDefault();
       e.stopPropagation();
-      file = e.originalEvent.dataTransfer.files[0];
       reader = new FileReader();
       reader.onload = function(e) {
         var buffer;
@@ -33,7 +32,7 @@
           return $("#text").text("再生できないファイルです.");
         }
       };
-      return reader.readAsArrayBuffer(file);
+      return reader.readAsArrayBuffer(e.originalEvent.dataTransfer.files[0]);
     });
     if (timbre.env === "webkit") {
       return $("#text").text("音楽ファイルをドラッグ & ドロップすると逆再生します.");
