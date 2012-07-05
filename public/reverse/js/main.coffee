@@ -3,7 +3,7 @@
 jQuery ->
     synth = T("buffer").set(loop:true, reversed:true).play()
 
-    ctx  = new webkitAudioContext()
+    ctx = null
 
     $body = $ document.body
     $body.on "dragover", (e)->
@@ -13,6 +13,8 @@ jQuery ->
     $body.on "drop", (e)->
         e.preventDefault()
         e.stopPropagation()
+
+        return if ctx is null
 
         reader = new FileReader()
         reader.onload = (e)->
@@ -28,6 +30,7 @@ jQuery ->
         reader.readAsArrayBuffer e.originalEvent.dataTransfer.files[0]
 
     if timbre.env is "webkit"
+        ctx = new webkitAudioContext()
         $("#text").text "音楽ファイルをドラッグ & ドロップすると逆再生します."
     else
         $("#text").text "Chrome で開いてね!!"

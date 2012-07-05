@@ -8,7 +8,7 @@
       loop: true,
       reversed: true
     }).play();
-    ctx = new webkitAudioContext();
+    ctx = null;
     $body = $(document.body);
     $body.on("dragover", function(e) {
       e.preventDefault();
@@ -18,6 +18,9 @@
       var reader;
       e.preventDefault();
       e.stopPropagation();
+      if (ctx === null) {
+        return;
+      }
       reader = new FileReader();
       reader.onload = function(e) {
         var buffer;
@@ -35,6 +38,7 @@
       return reader.readAsArrayBuffer(e.originalEvent.dataTransfer.files[0]);
     });
     if (timbre.env === "webkit") {
+      ctx = new webkitAudioContext();
       return $("#text").text("音楽ファイルをドラッグ & ドロップすると逆再生します.");
     } else {
       return $("#text").text("Chrome で開いてね!!");
