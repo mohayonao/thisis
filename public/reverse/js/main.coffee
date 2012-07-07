@@ -1,5 +1,20 @@
 "use strict"
 
+if navigator.language is "ja"
+    Message = {
+        openWithChrome: "Chrome で開いてね!!"
+        dragAndDropToPlay: "音楽ファイルをドラッグ & ドロップすると再生します."
+        play: "再生を開始します."
+        cannotPlay: "再生できないファイルです."
+    }
+else
+    Message = {
+        openWithChrome: "Please open with Chrome"
+        dragAndDropToPlay: "Drag & drop an audio file to play"
+        play: "Play"
+        cannotPlay: "Cannot play"
+    }
+
 jQuery ->
     synth = T("buffer").set(loop:true, reversed:true).play()
 
@@ -21,16 +36,16 @@ jQuery ->
             try
                 buffer = ctx.createBuffer(e.target.result, true).getChannelData 0
                 synth.buffer = buffer
-                $("#text").text "再生を開始します."
+                $("#text").text Message.play
                 setTimeout ->
-                    $("#text").text "音楽ファイルをドラッグ & ドロップすると再生します."
+                    $("#text").text Message.dragAndDropToPlay
                 , 5000
             catch e
-                $("#text").text "再生できないファイルです."
+                $("#text").text Message.cannotPlay
         reader.readAsArrayBuffer e.originalEvent.dataTransfer.files[0]
 
     if timbre.env is "webkit"
         ctx = new webkitAudioContext()
-        $("#text").text "音楽ファイルをドラッグ & ドロップすると再生します."
+        $("#text").text Message.dragAndDropToPlay
     else
-        $("#text").text "Chrome で開いてね!!"
+        $("#text").text Message.openWithChrome

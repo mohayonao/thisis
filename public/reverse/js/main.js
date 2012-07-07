@@ -2,6 +2,24 @@
 (function() {
   "use strict";
 
+  var Message;
+
+  if (navigator.language === "ja") {
+    Message = {
+      openWithChrome: "Chrome で開いてね!!",
+      dragAndDropToPlay: "音楽ファイルをドラッグ & ドロップすると再生します.",
+      play: "再生を開始します.",
+      cannotPlay: "再生できないファイルです."
+    };
+  } else {
+    Message = {
+      openWithChrome: "Please open with Chrome",
+      dragAndDropToPlay: "Drag & drop an audio file to play",
+      play: "Play",
+      cannotPlay: "Cannot play"
+    };
+  }
+
   jQuery(function() {
     var $body, ctx, synth;
     synth = T("buffer").set({
@@ -27,21 +45,21 @@
         try {
           buffer = ctx.createBuffer(e.target.result, true).getChannelData(0);
           synth.buffer = buffer;
-          $("#text").text("逆再生を開始します.");
+          $("#text").text(Message.play);
           return setTimeout(function() {
-            return $("#text").text("音楽ファイルをドラッグ & ドロップすると逆再生します.");
+            return $("#text").text(Message.dragAndDropToPlay);
           }, 5000);
         } catch (e) {
-          return $("#text").text("再生できないファイルです.");
+          return $("#text").text(Message.cannotPlay);
         }
       };
       return reader.readAsArrayBuffer(e.originalEvent.dataTransfer.files[0]);
     });
     if (timbre.env === "webkit") {
       ctx = new webkitAudioContext();
-      return $("#text").text("音楽ファイルをドラッグ & ドロップすると逆再生します.");
+      return $("#text").text(Message.dragAndDropToPlay);
     } else {
-      return $("#text").text("Chrome で開いてね!!");
+      return $("#text").text(Message.openWithChrome);
     }
   });
 
