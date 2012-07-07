@@ -1,5 +1,20 @@
 "use strict"
 
+if navigator.language is "ja"
+    Message = {
+        openWithChrome: "Chrome で開いてね!!"
+        dragAndDropToPlay: "音楽ファイルをドラッグ & ドロップすると再生します."
+        play: "再生を開始します."
+        cannotPlay: "再生できないファイルです."
+    }
+else
+    Message = {
+        openWithChrome: "Please open with Chrome"
+        dragAndDropToPlay: "Drag & drop an audio file to play"
+        play: "Play"
+        cannotPlay: "Cannot play"
+    }
+
 requestAnimationFrame = window.requestAnimationFrame or
         window.webkitRequestAnimationFrame or
         window.mozRequestAnimationFrame    or
@@ -103,18 +118,18 @@ jQuery ->
             try
                 buffer = ctx.createBuffer(e.target.result, true).getChannelData 0
                 synth.setBuffer buffer
-                $("#text").text "再生を開始します."
+                $("#text").text Message.play
                 setTimeout ->
-                    $("#text").text "音楽ファイルをドラッグ & ドロップすると再生します."
+                    $("#text").text Message.dragAndDropToPlay
                 , 5000
             catch e
-                $("#text").text "再生できないファイルです."
+                $("#text").text Message.cannotPlay
         reader.readAsArrayBuffer file
 
     if timbre.env is "webkit"
-        $("#text").text "音楽ファイルをドラッグ & ドロップすると再生します."
+        $("#text").text Message.dragAndDropToPlay
     else
-        $("#text").text "Chrome で開いてね!!"
+        $("#text").text Message.openWithChrome
 
 
     $canvas = $("#canvas")
@@ -197,6 +212,16 @@ jQuery ->
             timer.on()
             $(this).css("color", "red").text("sparse-pause")
 
-    do -> EQ_Params[i] = Math.random() for i in [0...EQ_SIZE]
+    r = Math.random()
+    if r < 0.2
+        do -> EQ_Params[i] = 1 for i in [0...EQ_SIZE]
+    else if r < 0.4
+        do -> EQ_Params[i] = i / EQ_SIZE for i in [0...EQ_SIZE]
+    else if r < 0.6
+        do -> EQ_Params[i] = 1 - (i / EQ_SIZE) for i in [0...EQ_SIZE]
+    else if r < 0.8
+        do -> EQ_Params[i] = (i % 3) / 2 for i in [0...EQ_SIZE]
+    else
+        do -> EQ_Params[i] = Math.random() for i in [0...EQ_SIZE]
 
     animate()

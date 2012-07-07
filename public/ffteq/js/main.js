@@ -2,14 +2,30 @@
 (function() {
   "use strict";
 
-  var requestAnimationFrame;
+  var Message, requestAnimationFrame;
+
+  if (navigator.language === "ja") {
+    Message = {
+      openWithChrome: "Chrome で開いてね!!",
+      dragAndDropToPlay: "音楽ファイルをドラッグ & ドロップすると再生します.",
+      play: "再生を開始します.",
+      cannotPlay: "再生できないファイルです."
+    };
+  } else {
+    Message = {
+      openWithChrome: "Please open with Chrome",
+      dragAndDropToPlay: "Drag & drop an audio file to play",
+      play: "Play",
+      cannotPlay: "Cannot play"
+    };
+  }
 
   requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(f) {
     return setTimeout(f, 1000 / 60);
   };
 
   jQuery(function() {
-    var $body, $canvas, AcmeFFT, DEBUG, EQ_Params, EQ_SIZE, animate, ctx, mouseFunction, sparse, synth, timer;
+    var $body, $canvas, AcmeFFT, DEBUG, EQ_Params, EQ_SIZE, animate, ctx, mouseFunction, r, sparse, synth, timer;
     EQ_SIZE = 64;
     EQ_Params = new Float32Array(EQ_SIZE);
     AcmeFFT = function(n) {
@@ -103,20 +119,20 @@
         try {
           buffer = ctx.createBuffer(e.target.result, true).getChannelData(0);
           synth.setBuffer(buffer);
-          $("#text").text("再生を開始します.");
+          $("#text").text(Message.play);
           return setTimeout(function() {
-            return $("#text").text("音楽ファイルをドラッグ & ドロップすると再生します.");
+            return $("#text").text(Message.dragAndDropToPlay);
           }, 5000);
         } catch (e) {
-          return $("#text").text("再生できないファイルです.");
+          return $("#text").text(Message.cannotPlay);
         }
       };
       return reader.readAsArrayBuffer(file);
     });
     if (timbre.env === "webkit") {
-      $("#text").text("音楽ファイルをドラッグ & ドロップすると再生します.");
+      $("#text").text(Message.dragAndDropToPlay);
     } else {
-      $("#text").text("Chrome で開いてね!!");
+      $("#text").text(Message.openWithChrome);
     }
     $canvas = $("#canvas");
     animate = function() {
@@ -223,14 +239,53 @@
         return $(this).css("color", "red").text("sparse-pause");
       }
     });
-    (function() {
-      var i, _i, _results;
-      _results = [];
-      for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
-        _results.push(EQ_Params[i] = Math.random());
-      }
-      return _results;
-    })();
+    r = Math.random();
+    if (r < 0.2) {
+      (function() {
+        var i, _i, _results;
+        _results = [];
+        for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
+          _results.push(EQ_Params[i] = 1);
+        }
+        return _results;
+      })();
+    } else if (r < 0.4) {
+      (function() {
+        var i, _i, _results;
+        _results = [];
+        for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
+          _results.push(EQ_Params[i] = i / EQ_SIZE);
+        }
+        return _results;
+      })();
+    } else if (r < 0.6) {
+      (function() {
+        var i, _i, _results;
+        _results = [];
+        for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
+          _results.push(EQ_Params[i] = 1 - (i / EQ_SIZE));
+        }
+        return _results;
+      })();
+    } else if (r < 0.8) {
+      (function() {
+        var i, _i, _results;
+        _results = [];
+        for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
+          _results.push(EQ_Params[i] = (i % 3) / 2);
+        }
+        return _results;
+      })();
+    } else {
+      (function() {
+        var i, _i, _results;
+        _results = [];
+        for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
+          _results.push(EQ_Params[i] = Math.random());
+        }
+        return _results;
+      })();
+    }
     return animate();
   });
 
