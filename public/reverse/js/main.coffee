@@ -21,9 +21,9 @@ jQuery ->
             try
                 buffer = ctx.createBuffer(e.target.result, true).getChannelData 0
                 synth.buffer = buffer
-                $("#text").text "逆再生を開始します."
+                $("#text").text "再生を開始します."
                 setTimeout ->
-                    $("#text").text "音楽ファイルをドラッグ & ドロップすると逆再生します."
+                    $("#text").text "音楽ファイルをドラッグ & ドロップすると再生します."
                 , 5000
             catch e
                 $("#text").text "再生できないファイルです."
@@ -31,6 +31,6 @@ jQuery ->
 
     if timbre.env is "webkit"
         ctx = new webkitAudioContext()
-        $("#text").text "音楽ファイルをドラッグ & ドロップすると逆再生します."
+        $("#text").text "音楽ファイルをドラッグ & ドロップすると再生します."
     else
         $("#text").text "Chrome で開いてね!!"
