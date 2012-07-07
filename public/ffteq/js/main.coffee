@@ -143,11 +143,11 @@ jQuery ->
         mouseFunction e, true
         $canvas.isMousedown = false
 
-    $("#reset").on "click", (e)->
-        do -> EQ_Params[i] = 0.8 for i in [0...EQ_SIZE]
+    $("#1_0").on "click", (e)->
+        do -> EQ_Params[i] = 1.0 for i in [0...EQ_SIZE]
         $canvas.draw EQ_Params
-    $("#clear").on "click", (e)->
-        do -> EQ_Params[i] = 0 for i in [0...EQ_SIZE]
+    $("#0_0").on "click", (e)->
+        do -> EQ_Params[i] = 0.0 for i in [0...EQ_SIZE]
         $canvas.draw EQ_Params
 
     sparse = ->
@@ -166,15 +166,13 @@ jQuery ->
     sparse.size = 16
     sparse.data = []
 
-    timerId = 0
+    timer = T("interval", 50, sparse)
     $("#sparse-play").on "click", (e)->
-        if timerId != 0
-            clearInterval timerId
-            timerId = 0
+        if timer.isOn
+            timer.off()
             $(this).css "color", "black"
         else
-            $("#clear").click()
-            timerId = setInterval sparse, 50
+            timer.on()
             $(this).css "color", "red"
 
     do -> EQ_Params[i] = 0.8 for i in [0...EQ_SIZE]

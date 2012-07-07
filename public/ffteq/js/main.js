@@ -3,7 +3,7 @@
   "use strict";
 
   jQuery(function() {
-    var $body, $canvas, AcmeFFT, EQ_Params, EQ_SIZE, ctx, mouseFunction, sparse, synth, timerId;
+    var $body, $canvas, AcmeFFT, EQ_Params, EQ_SIZE, ctx, mouseFunction, sparse, synth, timer;
     EQ_SIZE = 64;
     EQ_Params = new Float32Array(EQ_SIZE);
     AcmeFFT = function(n) {
@@ -153,23 +153,23 @@
       mouseFunction(e, true);
       return $canvas.isMousedown = false;
     });
-    $("#reset").on("click", function(e) {
+    $("#1_0").on("click", function(e) {
       (function() {
         var i, _i, _results;
         _results = [];
         for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
-          _results.push(EQ_Params[i] = 0.8);
+          _results.push(EQ_Params[i] = 1.0);
         }
         return _results;
       })();
       return $canvas.draw(EQ_Params);
     });
-    $("#clear").on("click", function(e) {
+    $("#0_0").on("click", function(e) {
       (function() {
         var i, _i, _results;
         _results = [];
         for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
-          _results.push(EQ_Params[i] = 0);
+          _results.push(EQ_Params[i] = 0.0);
         }
         return _results;
       })();
@@ -191,15 +191,13 @@
     };
     sparse.size = 16;
     sparse.data = [];
-    timerId = 0;
+    timer = T("interval", 50, sparse);
     $("#sparse-play").on("click", function(e) {
-      if (timerId !== 0) {
-        clearInterval(timerId);
-        timerId = 0;
+      if (timer.isOn) {
+        timer.off();
         return $(this).css("color", "black");
       } else {
-        $("#clear").click();
-        timerId = setInterval(sparse, 50);
+        timer.on();
         return $(this).css("color", "red");
       }
     });

@@ -2,16 +2,21 @@
   <head>
     <meta charset="utf-8">
     <title>フーリエ変換でイコライザ</title>
+    <link rel="stylesheet" href="/libs/css/bootstrap.min.css" />
   </head>
   <body>
-    <strong id="text"></strong>
-    <div id="control" style="padding:50px">
-      <canvas id="canvas" style="border:solid 1px gray;width:100%;height:320px"></canvas>
+    <div class="well">
+      <strong id="text"></strong>
     </div>
-    <button id="reset">all 0.8</button>
-    <button id="clear">all 0.0</button>
-    <button id="sparse-play">sparse-play</button>
-    <span id="status"></span>
+    <div class="container">    
+      <div id="control" style="padding:50px">
+        <canvas id="canvas" style="border:solid 1px gray;width:100%;height:320px"></canvas>
+      </div>
+      <button class="btn" id="1_0">1.0</button>
+      <button class="btn" id="0_0">0.0</button>
+      <button class="btn" id="sparse-play">sparse-play</button>
+      <b id="status" class="pull-right"></b>
+    </div>
     <script type="text/javascript" src="/libs/js/jquery.min.js"></script>
     <script type="text/javascript" src="/libs/js/timbre.min.js"></script>
     <script type="text/javascript" src="/libs/js/footer.js"></script>
