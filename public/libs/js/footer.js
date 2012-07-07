@@ -1,5 +1,7 @@
 jQuery(function() {
-    var $footer = $("<footer>").css({"margin-top":"15px", "font-size":"0.8em"});
+    var $footer = $("<footer>").css({"position":"absolute",
+                                     "bottom":"10px", "left":"10px"});
+
     var $span = $("<span>").text(document.title + " / ");
     var $a    = $("<a>").attr("target", "_blank").css("color", "blue").text("sourcecode");
 
