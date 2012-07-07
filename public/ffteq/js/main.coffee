@@ -155,11 +155,15 @@ jQuery ->
         sparse.data.push x
         EQ_Params[x] = 1
 
-        if sparse.data.length > 8
+        if sparse.data.length > sparse.size
             x = sparse.data.shift()
             EQ_Params[x] = 0
+        for i in [0...sparse.size]
+            EQ_Params[sparse.data[i]] = i / sparse.size
+
 
         $canvas.draw EQ_Params
+    sparse.size = 16
     sparse.data = []
 
     timerId = 0
@@ -170,7 +174,7 @@ jQuery ->
             $(this).css "color", "black"
         else
             $("#clear").click()
-            timerId = setInterval sparse, 250
+            timerId = setInterval sparse, 50
             $(this).css "color", "red"
 
     do -> EQ_Params[i] = 0.8 for i in [0...EQ_SIZE]

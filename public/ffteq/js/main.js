@@ -176,16 +176,20 @@
       return $canvas.draw(EQ_Params);
     });
     sparse = function() {
-      var x;
+      var i, x, _i, _ref;
       x = (Math.random() * EQ_SIZE) | 0;
       sparse.data.push(x);
       EQ_Params[x] = 1;
-      if (sparse.data.length > 8) {
+      if (sparse.data.length > sparse.size) {
         x = sparse.data.shift();
         EQ_Params[x] = 0;
       }
+      for (i = _i = 0, _ref = sparse.size; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        EQ_Params[sparse.data[i]] = i / sparse.size;
+      }
       return $canvas.draw(EQ_Params);
     };
+    sparse.size = 16;
     sparse.data = [];
     timerId = 0;
     $("#sparse-play").on("click", function(e) {
@@ -195,7 +199,7 @@
         return $(this).css("color", "black");
       } else {
         $("#clear").click();
-        timerId = setInterval(sparse, 250);
+        timerId = setInterval(sparse, 50);
         return $(this).css("color", "red");
       }
     });
