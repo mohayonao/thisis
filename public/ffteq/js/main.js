@@ -2,8 +2,14 @@
 (function() {
   "use strict";
 
+  var requestAnimationFrame;
+
+  requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(f) {
+    return setTimeout(f, 1000 / 60);
+  };
+
   jQuery(function() {
-    var $body, $canvas, AcmeFFT, EQ_Params, EQ_SIZE, ctx, mouseFunction, sparse, synth, timer;
+    var $body, $canvas, AcmeFFT, DEBUG, EQ_Params, EQ_SIZE, animate, ctx, mouseFunction, sparse, synth, timer;
     EQ_SIZE = 64;
     EQ_Params = new Float32Array(EQ_SIZE);
     AcmeFFT = function(n) {
@@ -22,8 +28,9 @@
       }).bang();
       return this;
     };
+    DEBUG = 0;
     AcmeFFT.prototype.seq = function(seq_id) {
-      var cell, di, dx, fft, i, imag, j, n, nn, real, res, x, _, _i, _j, _k, _ref, _ref1;
+      var cell, dd, delta, di, dx, fft, i, imag, index, j, n, nn, real, res, x, x0, x1, _, _i, _j, _k, _ref, _ref1;
       _ = this._;
       if (_.seq_id !== seq_id) {
         _.seq_id = seq_id;
@@ -47,11 +54,22 @@
           nn = n >> 1;
           dx = timbre.samplerate / nn / 2;
           di = EQ_SIZE / this.size;
+          dd = nn / EQ_SIZE;
           for (i = _k = 0; 0 <= nn ? _k < nn : _k > nn; i = 0 <= nn ? ++_k : --_k) {
             j = n - i - 1;
             x = i * dx;
             if (x < 8000) {
-              x = EQ_Params[(x / 8000 * EQ_SIZE) | 0];
+              x = x / 8000 * EQ_SIZE;
+              index = x | 0;
+              delta = x - index;
+              x0 = index;
+              x1 = index + 1;
+              x0 = EQ_Params[x0];
+              x1 = EQ_Params[x1];
+              if (x1 === void 0) {
+                x1 = x0;
+              }
+              x = (1.0 - delta) * x0 + delta * x1;
             } else {
               x = EQ_Params[EQ_SIZE - 1];
             }
@@ -61,6 +79,7 @@
             imag[j] *= x;
           }
           fft.inverse(real, imag);
+          DEBUG += 1;
         }
       }
       return this.cell;
@@ -100,21 +119,24 @@
       $("#text").text("Chrome で開いてね!!");
     }
     $canvas = $("#canvas");
-    $canvas.draw = function(list) {
-      var context, dx, h, i, w, x, y, _i, _ref;
+    animate = function() {
+      var context, dx, h, i, list, w, x, y, _i, _ref;
+      list = EQ_Params;
       w = $canvas.width();
       h = $canvas.height();
       context = $canvas.get(0).getContext("2d");
       context.save();
-      context.clearRect(0, 0, w, h);
-      context.fillStyle = "#6699ff";
+      context.fillStyle = "rgba(255, 255, 255, 0.2)";
+      context.fillRect(0, 0, w, h);
+      context.fillStyle = "rgba(  0, 128, 255, 0.8)";
       dx = w / list.length;
       for (i = _i = 0, _ref = list.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         x = i * dx;
         y = h * list[i];
-        context.fillRect(x | 0, h - y, dx + 0.5, y);
+        context.fillRect(x, h - y, dx, y);
       }
-      return context.restore();
+      context.restore();
+      return requestAnimationFrame(animate);
     };
     $canvas.get(0).width = $canvas.width();
     $canvas.get(0).height = $canvas.height();
@@ -136,7 +158,6 @@
       }
       if (change) {
         EQ_Params[(x * EQ_SIZE) | 0] = 1 - y;
-        $canvas.draw(EQ_Params);
       }
       x = (x * 8000) | 0;
       y = 1 - y;
@@ -176,7 +197,7 @@
       return $canvas.draw(EQ_Params);
     });
     sparse = function() {
-      var i, x, _i, _ref;
+      var i, x, _i, _ref, _results;
       x = (Math.random() * EQ_SIZE) | 0;
       sparse.data.push(x);
       EQ_Params[x] = 1;
@@ -184,10 +205,11 @@
         x = sparse.data.shift();
         EQ_Params[x] = 0;
       }
-      for (i = _i = 0, _ref = sparse.size; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        EQ_Params[sparse.data[i]] = i / sparse.size;
+      _results = [];
+      for (i = _i = 0, _ref = sparse.size - 1; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        _results.push(EQ_Params[sparse.data[i]] = i / (sparse.size - 1));
       }
-      return $canvas.draw(EQ_Params);
+      return _results;
     };
     sparse.size = 16;
     sparse.data = [];
@@ -195,21 +217,21 @@
     $("#sparse-play").on("click", function(e) {
       if (timer.isOn) {
         timer.off();
-        return $(this).css("color", "black");
+        return $(this).css("color", "black").text("sparse-play");
       } else {
         timer.on();
-        return $(this).css("color", "red");
+        return $(this).css("color", "red").text("sparse-pause");
       }
     });
     (function() {
       var i, _i, _results;
       _results = [];
       for (i = _i = 0; 0 <= EQ_SIZE ? _i < EQ_SIZE : _i > EQ_SIZE; i = 0 <= EQ_SIZE ? ++_i : --_i) {
-        _results.push(EQ_Params[i] = 0.8);
+        _results.push(EQ_Params[i] = Math.random());
       }
       return _results;
     })();
-    return $canvas.draw(EQ_Params);
+    return animate();
   });
 
 }).call(this);

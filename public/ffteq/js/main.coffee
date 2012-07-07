@@ -1,5 +1,12 @@
 "use strict"
 
+requestAnimationFrame = window.requestAnimationFrame or
+        window.webkitRequestAnimationFrame or
+        window.mozRequestAnimationFrame    or
+        window.oRequestAnimationFrame      or
+        window.msRequestAnimationFrame     or
+        (f)->setTimeout(f, 1000/60)
+
 jQuery ->
     EQ_SIZE = 64
     EQ_Params = new Float32Array(EQ_SIZE)
@@ -15,6 +22,8 @@ jQuery ->
     AcmeFFT.prototype.setBuffer = (buffer)->
         @source.set({buffer:buffer}).bang()
         @
+
+    DEBUG = 0
 
     AcmeFFT.prototype.seq = (seq_id)->
         _ = @_
@@ -47,12 +56,21 @@ jQuery ->
                 nn = n >> 1
                 dx = timbre.samplerate / nn / 2
                 di = EQ_SIZE / @size
+                dd = nn / EQ_SIZE
 
                 for i in [0...nn]
                     j = n - i - 1
                     x = i * dx
                     if x < 8000
-                        x = EQ_Params[(x / 8000 * EQ_SIZE)|0]
+                        x = x / 8000 * EQ_SIZE
+                        index = x|0
+                        delta = x - index
+                        x0 = index
+                        x1 = index + 1
+                        x0 = EQ_Params[x0]
+                        x1 = EQ_Params[x1]
+                        x1 = x0 if x1 is undefined
+                        x = (1.0 - delta) * x0 + delta * x1;
                     else
                         x = EQ_Params[EQ_SIZE-1]
                     real[i] *= x
@@ -60,6 +78,7 @@ jQuery ->
                     real[j] *= x
                     imag[j] *= x
                 fft.inverse real, imag
+                DEBUG += 1
         @cell
     timbre.fn.register("acme", AcmeFFT)
 
@@ -99,21 +118,27 @@ jQuery ->
 
 
     $canvas = $("#canvas")
-    $canvas.draw = (list)->
+    animate = ->
+        list = EQ_Params
         w = $canvas.width()
         h = $canvas.height()
         context = $canvas.get(0).getContext "2d"
 
         context.save()
-        context.clearRect 0, 0, w, h
-        context.fillStyle = "#6699ff"
+        context.fillStyle = "rgba(255, 255, 255, 0.2)"
+        context.fillRect 0, 0, w, h
+
+        context.fillStyle = "rgba(  0, 128, 255, 0.8)"
 
         dx = w / list.length
         for i in [0...list.length]
             x = i * dx
             y = h * list[i]
-            context.fillRect(x|0, h - y, dx+0.5, y)
+            context.fillRect(x, h - y, dx, y)
         context.restore()
+
+        requestAnimationFrame animate
+
     $canvas.get(0).width  = $canvas.width()
     $canvas.get(0).height = $canvas.height()
 
@@ -129,7 +154,6 @@ jQuery ->
 
         if change
             EQ_Params[(x * EQ_SIZE)|0] = 1 - y
-            $canvas.draw EQ_Params
         x = (x * 8000)|0
         y = 1 - y
         $("#status").text "#{x}Hz / #{y.toFixed(2)}"
@@ -158,11 +182,9 @@ jQuery ->
         if sparse.data.length > sparse.size
             x = sparse.data.shift()
             EQ_Params[x] = 0
-        for i in [0...sparse.size]
-            EQ_Params[sparse.data[i]] = i / sparse.size
+        for i in [0...sparse.size - 1]
+            EQ_Params[sparse.data[i]] = i / (sparse.size - 1)
 
-
-        $canvas.draw EQ_Params
     sparse.size = 16
     sparse.data = []
 
@@ -170,10 +192,11 @@ jQuery ->
     $("#sparse-play").on "click", (e)->
         if timer.isOn
             timer.off()
-            $(this).css "color", "black"
+            $(this).css("color", "black").text("sparse-play")
         else
             timer.on()
-            $(this).css "color", "red"
+            $(this).css("color", "red").text("sparse-pause")
 
-    do -> EQ_Params[i] = 0.8 for i in [0...EQ_SIZE]
-    $canvas.draw EQ_Params
+    do -> EQ_Params[i] = Math.random() for i in [0...EQ_SIZE]
+
+    animate()
