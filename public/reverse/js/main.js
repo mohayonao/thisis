@@ -21,42 +21,35 @@
   }
 
   jQuery(function() {
-    var $body, ctx, synth;
-    synth = T("buffer").set({
+    var $body, synth;
+    synth = T("audio").set({
       loop: true,
       reversed: true
     }).play();
-    ctx = null;
+    synth.onloadedmetadata = function() {
+      $("#text").text(Message.play);
+      return setTimeout(function() {
+        return $("#text").text(Message.dragAndDropToPlay);
+      }, 5000);
+    };
+    synth.onerror = function(e) {
+      return $("#text").text(Message.cannotPlay);
+    };
     $body = $(document.body);
     $body.on("dragover", function(e) {
       e.preventDefault();
       return e.stopPropagation();
     });
     $body.on("drop", function(e) {
-      var reader;
+      var file;
       e.preventDefault();
       e.stopPropagation();
-      if (ctx === null) {
-        return;
-      }
-      reader = new FileReader();
-      reader.onload = function(e) {
-        var buffer;
-        try {
-          buffer = ctx.createBuffer(e.target.result, true).getChannelData(0);
-          synth.buffer = buffer;
-          $("#text").text(Message.play);
-          return setTimeout(function() {
-            return $("#text").text(Message.dragAndDropToPlay);
-          }, 5000);
-        } catch (e) {
-          return $("#text").text(Message.cannotPlay);
-        }
-      };
-      return reader.readAsArrayBuffer(e.originalEvent.dataTransfer.files[0]);
+      file = e.originalEvent.dataTransfer.files[0];
+      return synth.set({
+        src: file
+      }).load();
     });
     if (timbre.env === "webkit") {
-      ctx = new webkitAudioContext();
       return $("#text").text(Message.dragAndDropToPlay);
     } else {
       return $("#text").text(Message.openWithChrome);

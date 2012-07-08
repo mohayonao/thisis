@@ -16,9 +16,14 @@ else
     }
 
 jQuery ->
-    synth = T("buffer").set(loop:true, reversed:true).play()
-
-    ctx = null
+    synth = T("audio").set(loop:true, reversed:true).play()
+    synth.onloadedmetadata = ->
+        $("#text").text Message.play
+        setTimeout ->
+            $("#text").text Message.dragAndDropToPlay
+        , 5000
+    synth.onerror = (e)->
+        $("#text").text Message.cannotPlay
 
     $body = $ document.body
     $body.on "dragover", (e)->
@@ -29,23 +34,10 @@ jQuery ->
         e.preventDefault()
         e.stopPropagation()
 
-        return if ctx is null
-
-        reader = new FileReader()
-        reader.onload = (e)->
-            try
-                buffer = ctx.createBuffer(e.target.result, true).getChannelData 0
-                synth.buffer = buffer
-                $("#text").text Message.play
-                setTimeout ->
-                    $("#text").text Message.dragAndDropToPlay
-                , 5000
-            catch e
-                $("#text").text Message.cannotPlay
-        reader.readAsArrayBuffer e.originalEvent.dataTransfer.files[0]
+        file = e.originalEvent.dataTransfer.files[0]
+        synth.set(src:file).load()
 
     if timbre.env is "webkit"
-        ctx = new webkitAudioContext()
         $("#text").text Message.dragAndDropToPlay
     else
         $("#text").text Message.openWithChrome

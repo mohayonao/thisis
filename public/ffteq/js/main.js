@@ -25,26 +25,32 @@
   };
 
   jQuery(function() {
-    var $body, $canvas, AcmeFFT, DEBUG, EQ_Params, EQ_SIZE, animate, ctx, mouseFunction, r, sparse, synth, timer;
+    var $body, $canvas, AcmeFFT, EQ_Params, EQ_SIZE, animate, mouseFunction, r, sparse, synth, timer;
     EQ_SIZE = 64;
     EQ_Params = new Float32Array(EQ_SIZE);
     AcmeFFT = function(n) {
+      var _this = this;
       this.size = 1024;
-      this.source = T("buffer").set({
+      this.source = T("audio").set({
         loop: true
       });
+      this.source.onloadedmetadata = function(e) {
+        return _this.onloadedmetadata(e);
+      };
+      this.source.onerror = function(e) {
+        return _this.onerror(e);
+      };
       this.fft = new FFT(this.size);
       this.buffer = new Float32Array(this.size);
       this.index = 0;
       return this;
     };
-    AcmeFFT.prototype.setBuffer = function(buffer) {
+    AcmeFFT.prototype.setFile = function(file) {
       this.source.set({
-        buffer: buffer
-      }).bang();
+        src: file
+      }).load();
       return this;
     };
-    DEBUG = 0;
     AcmeFFT.prototype.seq = function(seq_id) {
       var cell, dd, delta, di, dx, fft, i, imag, index, j, n, nn, real, res, x, x0, x1, _, _i, _j, _k, _ref, _ref1;
       _ = this._;
@@ -95,39 +101,32 @@
             imag[j] *= x;
           }
           fft.inverse(real, imag);
-          DEBUG += 1;
         }
       }
       return this.cell;
     };
     timbre.fn.register("acme", AcmeFFT);
     synth = T("acme").play();
-    ctx = new webkitAudioContext();
+    synth.onloadedmetadata = function() {
+      $("#text").text(Message.play);
+      return setTimeout(function() {
+        return $("#text").text(Message.dragAndDropToPlay);
+      }, 5000);
+    };
+    synth.onerror = function(e) {
+      return $("#text").text(Message.cannotPlay);
+    };
     $body = $(document.body);
     $body.on("dragover", function(e) {
       e.preventDefault();
       return e.stopPropagation();
     });
     $body.on("drop", function(e) {
-      var file, reader;
+      var file;
       e.preventDefault();
       e.stopPropagation();
       file = e.originalEvent.dataTransfer.files[0];
-      reader = new FileReader();
-      reader.onload = function(e) {
-        var buffer;
-        try {
-          buffer = ctx.createBuffer(e.target.result, true).getChannelData(0);
-          synth.setBuffer(buffer);
-          $("#text").text(Message.play);
-          return setTimeout(function() {
-            return $("#text").text(Message.dragAndDropToPlay);
-          }, 5000);
-        } catch (e) {
-          return $("#text").text(Message.cannotPlay);
-        }
-      };
-      return reader.readAsArrayBuffer(file);
+      return synth.setFile(file);
     });
     if (timbre.env === "webkit") {
       $("#text").text(Message.dragAndDropToPlay);

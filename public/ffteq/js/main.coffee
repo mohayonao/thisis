@@ -28,17 +28,17 @@ jQuery ->
 
     AcmeFFT = (n)->
         @size   = 1024
-        @source = T("buffer").set(loop:true)
+        @source = T("audio").set(loop:true)
+        @source.onloadedmetadata = (e)=> @onloadedmetadata e
+        @source.onerror          = (e)=> @onerror e
         @fft    = new FFT(@size)
         @buffer = new Float32Array(@size)
         @index  = 0
         @
 
-    AcmeFFT.prototype.setBuffer = (buffer)->
-        @source.set({buffer:buffer}).bang()
+    AcmeFFT.prototype.setFile = (file)->
+        @source.set({src:file}).load()
         @
-
-    DEBUG = 0
 
     AcmeFFT.prototype.seq = (seq_id)->
         _ = @_
@@ -93,14 +93,17 @@ jQuery ->
                     real[j] *= x
                     imag[j] *= x
                 fft.inverse real, imag
-                DEBUG += 1
         @cell
     timbre.fn.register("acme", AcmeFFT)
 
-
     synth = T("acme").play()
-
-    ctx  = new webkitAudioContext()
+    synth.onloadedmetadata = ->
+        $("#text").text Message.play
+        setTimeout ->
+            $("#text").text Message.dragAndDropToPlay
+        , 5000
+    synth.onerror = (e)->
+        $("#text").text Message.cannotPlay
 
     $body = $ document.body
     $body.on "dragover", (e)->
@@ -112,19 +115,7 @@ jQuery ->
         e.stopPropagation()
 
         file = e.originalEvent.dataTransfer.files[0]
-
-        reader = new FileReader()
-        reader.onload = (e)->
-            try
-                buffer = ctx.createBuffer(e.target.result, true).getChannelData 0
-                synth.setBuffer buffer
-                $("#text").text Message.play
-                setTimeout ->
-                    $("#text").text Message.dragAndDropToPlay
-                , 5000
-            catch e
-                $("#text").text Message.cannotPlay
-        reader.readAsArrayBuffer file
+        synth.setFile file
 
     if timbre.env is "webkit"
         $("#text").text Message.dragAndDropToPlay
