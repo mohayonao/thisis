@@ -31,7 +31,7 @@ jQuery ->
         @source = T("audio").set(loop:true)
         @source.onloadedmetadata = (e)=> @onloadedmetadata e
         @source.onerror          = (e)=> @onerror e
-        @fft    = new FFT(@size)
+        @fft    = new timbre.utils.FFT(@size)
         @buffer = new Float32Array(@size)
         @index  = 0
         @

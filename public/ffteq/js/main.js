@@ -40,7 +40,7 @@
       this.source.onerror = function(e) {
         return _this.onerror(e);
       };
-      this.fft = new FFT(this.size);
+      this.fft = new timbre.utils.FFT(this.size);
       this.buffer = new Float32Array(this.size);
       this.index = 0;
       return this;
