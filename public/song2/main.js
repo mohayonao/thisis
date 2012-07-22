@@ -3,10 +3,11 @@
 
   jQuery(function() {
     var Vocals, bass, bass_dac, buddies, chord, chord_dac, desc, drum, drum_dac, master, rnd_val, vocal, vocal_dac;
+    timbre.amp = 0.3;
     Vocals = ["e8.d8.e8", "d4.>b16<c16", "d8.d8.e8 | $1 d8.d8.c8", "e4.e16e16 | $1 c2", "e4d4 | $1 e8e8e8f8", "c4.c16c16 | $1 e8c8c8e8", "d8.d8.c8 | $1 e8.d8.c8", "c4.c16d16 | $1 c2", "c8.c8.d8", "d2", "d8.d8.e8 | $1 >b8.b8.<c8", "e2 | $1 c2", "e8f8e8d8", "c4.e16c16", "d8.c8.c8", "c2", "c4e4", "d4a8g8", "g8d8d8e8", "e2 | $1 c2", "c8.d8.c8", "d8.c8.d8", "e8.d8.c8 | $1 >b8.<c8.d8", "c2", "r8e8e8e8", "e8c8c8e8", "e8d8d8c8", "d8e16e16&e4 | $1 c2", ">a4.<c8", ">a4.<c8", "d4.e8", "c2", "d8.d8.e8", "e2", "d8.d8.c8", "c2", ">a4<e4", "f4.e16c16", "d8.d8.e8 | $1 d8.d8.c8", "e2 | $1 c2"];
     Vocals.index = 0;
     vocal_dac = T("dac").set({
-      pan: 0.6
+      pan: 0.7
     });
     vocal = T("mml", Vocals);
     vocal.synth = T("+").appendTo(vocal_dac);
@@ -44,7 +45,7 @@
       return Vocals.index = (Vocals.index + 1) % 8;
     };
     chord_dac = T("dac").set({
-      pan: 0.3
+      pan: 0.25
     });
     chord = T("mml", "l8 q6 $ [e0<c.>e0<c.>e0<c> rf0<d.>f0<d.>  g0b.g0b.g0b | <c0e4 >b0<d4>]2 < rg0<c.>g0<c.>> ");
     chord.synth = T("efx.delay").appendTo(chord_dac);

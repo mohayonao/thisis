@@ -1,5 +1,7 @@
 jQuery ->
 
+    timbre.amp = 0.3
+
     # vocal
     Vocals = [
         "e8.d8.e8", "d4.>b16<c16", "d8.d8.e8 | $1 d8.d8.c8", "e4.e16e16 | $1 c2",
@@ -15,7 +17,7 @@ jQuery ->
     ]
     Vocals.index = 0
 
-    vocal_dac = T("dac").set(pan:0.6)
+    vocal_dac = T("dac").set(pan:0.7)
     vocal = T("mml", Vocals)
     vocal.synth = T("+").appendTo vocal_dac
     vocal.synthdef = (freq, opts)->
@@ -45,7 +47,7 @@ jQuery ->
 
 
     # chord
-    chord_dac = T("dac").set(pan:0.3)
+    chord_dac = T("dac").set(pan:0.25)
     chord = T("mml", "l8 q6 $ [e0<c.>e0<c.>e0<c> rf0<d.>f0<d.>  g0b.g0b.g0b | <c0e4 >b0<d4>]2 < rg0<c.>g0<c.>> ")
     chord.synth = T("efx.delay").appendTo chord_dac
     chord.synthdef = (freq, opts)->
