@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Which Audio API is enabled?</title>
+    <link rel="stylesheet" href="/libs/css/bootstrap.min.css" />
+    <meta name="viewport" content="user-scalable=no, width=device-width" />
+    <style> h1 { text-shadow:2px 2px 2px #ccc } </style>
+  </head>
+  <body style="padding:50px">
+    <div class="container-fluid">
+      <div id="contents" style="opacity:0">
+        <div class="well">
+          <h1><span id="webkit"></span> Web Audio API</h1>
+          <em>samplerate:</em> <span id="webkit-sr">none</span>
+        </div>
+        <div class="well">
+          <h1><span id="moz"></span> Audio Data API</h1>
+          <em>samplerate:</em> <span id="moz-sr">none</span>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/libs/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/libs/js/footer.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+  </body>
+</html>
