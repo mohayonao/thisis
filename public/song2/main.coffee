@@ -111,15 +111,12 @@ jQuery ->
         else "Please open with Chrome or Firefox"
     $("#desc").text desc
 
-    # UI
-    $("#btn").on "click", ->
+    $("#play").on "click", ->
+        if not master.isPlaying
+            master.play()
+            master.isPlaying = true
+
+    $("#pause").on "click", ->
         if master.isPlaying
             master.pause()
-            $("#btn-img-pause").hide()
-            $("#btn-img-play" ).show()
             master.isPlaying = false
-        else
-            master.play()
-            $("#btn-img-play" ).hide()
-            $("#btn-img-pause").show()
-            master.isPlaying = true

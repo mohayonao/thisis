@@ -108,16 +108,12 @@ jQuery ->
     $("#desc").text desc
 
     # UI
-    $("#btn").on "click", ->
-        if master.isPlaying
-            master.pause()
-            $("#btn-img-pause").hide()
-            $("#btn-img-play" ).show()
-            master.isPlaying = false
-        else
+    $("#play").on "click", ->
+        if not master.isPlaying
             master.play()
-            $("#btn-img-play" ).hide()
-            $("#btn-img-pause").show()
             master.isPlaying = true
 
-
+    $("#pause").on "click", ->
+        if master.isPlaying
+            master.pause()
+            master.isPlaying = false

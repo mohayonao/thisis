@@ -126,17 +126,16 @@
       }
     })();
     $("#desc").text(desc);
-    return $("#btn").on("click", function() {
+    $("#play").on("click", function() {
+      if (!master.isPlaying) {
+        master.play();
+        return master.isPlaying = true;
+      }
+    });
+    return $("#pause").on("click", function() {
       if (master.isPlaying) {
         master.pause();
-        $("#btn-img-pause").hide();
-        $("#btn-img-play").show();
         return master.isPlaying = false;
-      } else {
-        master.play();
-        $("#btn-img-play").hide();
-        $("#btn-img-pause").show();
-        return master.isPlaying = true;
       }
     });
   });
