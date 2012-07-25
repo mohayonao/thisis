@@ -2,7 +2,7 @@
 (function() {
 
   jQuery(function() {
-    var car, dorian, i, master, pattern, scale, synth, tarai, timer;
+    var car, desc, dorian, i, master, pattern, scale, synth, tarai, timer;
     timbre.utils.exports("mtof");
     tarai = function(x, y, z) {
       tarai.result.push([x, y, z]);
@@ -71,6 +71,17 @@
       synth.cutoff = (1 - (y * y)) * 8000 + 400;
       return synth.Q = x * x;
     });
+    desc = (function() {
+      switch (timbre.env) {
+        case "webkit":
+          return "timbre.js on Web Audio API";
+        case "moz":
+          return "timbre.js on Audio Data API";
+        default:
+          return "Please open with Chrome or Firefox";
+      }
+    })();
+    $("#desc").text(desc);
     $("#play").on("click", function() {
       if (!master.isPlaying) {
         tarai.index = 0;

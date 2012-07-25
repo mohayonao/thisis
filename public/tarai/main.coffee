@@ -52,6 +52,13 @@ jQuery ->
         synth.cutoff = (1 - (y * y)) * 8000 + 400
         synth.Q      = x * x
 
+    # description
+    desc = switch timbre.env
+        when "webkit" then "timbre.js on Web Audio API"
+        when "moz"    then "timbre.js on Audio Data API"
+        else "Please open with Chrome or Firefox"
+    $("#desc").text desc
+
     $("#play").on "click", ->
         if not master.isPlaying
             tarai.index = 0
