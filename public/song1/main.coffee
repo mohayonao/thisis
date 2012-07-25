@@ -13,7 +13,7 @@ jQuery ->
 
     # vocal
     vocal_dac = T("dac").set(pan:0.3)
-    vocal = T("mml", "t138 o3 q4 l8 $ @1 eeer eeer @6 eeee eerr")
+    vocal = T("mml", "t138 q4 l8 $ @1 eeer eeer @6 eeee eerr")
     vocal.synth = T("rhpf", T("tri", 2, 200, 1320).kr(), 0.7).appendTo vocal_dac
     vocal.index = 0
     vocal.random = false
@@ -32,7 +32,7 @@ jQuery ->
     # fue
     fue_dac = T("dac").set(pan:T("+sin", 0.05))
     rndfreq = [ atof("G2"), atof("A2"), atof("A2"), atof("C3"), atof("D3") ]
-    fue = T("mml", "t138 q6 o4 $ l4 a<cc>a <el8dedc>ag a4aga<cc4> a4aga<ee4>")
+    fue = T("mml", "t138 q6 o3 $ l4 a<cc>a <el8dedc>ag a4aga<cc4> a4aga<ee4>")
     fue.synth = T("efx.reverb").appendTo fue_dac
     fue.synthdef = (freq, opts)->
         synth = T("*", T("osc", "wavc(0080a0c0)", T("osc", "sin(5)", 4, 2, freq).kr(), 0.25),
@@ -52,7 +52,7 @@ jQuery ->
 
     # bass
     bass_dac = T("dac")
-    bass = T("mml", "t138 o2 l8 $ [aarr | ggrr]4 gg<cc>")
+    bass = T("mml", "t138 o1 l8 $ [aarr | ggrr]4 gg<cc>")
     bass.synth = T("+").appendTo bass_dac
     bass.synthdef = (freq, opts)->
         synth = T("*", T("clip", T("osc", "sin(@1)", freq * 2, 4)).set(mul:0.5),

@@ -22,7 +22,7 @@
     vocal_dac = T("dac").set({
       pan: 0.3
     });
-    vocal = T("mml", "t138 o3 q4 l8 $ @1 eeer eeer @6 eeee eerr");
+    vocal = T("mml", "t138 q4 l8 $ @1 eeer eeer @6 eeee eerr");
     vocal.synth = T("rhpf", T("tri", 2, 200, 1320).kr(), 0.7).appendTo(vocal_dac);
     vocal.index = 0;
     vocal.random = false;
@@ -49,7 +49,7 @@
       pan: T("+sin", 0.05)
     });
     rndfreq = [atof("G2"), atof("A2"), atof("A2"), atof("C3"), atof("D3")];
-    fue = T("mml", "t138 q6 o4 $ l4 a<cc>a <el8dedc>ag a4aga<cc4> a4aga<ee4>");
+    fue = T("mml", "t138 q6 o3 $ l4 a<cc>a <el8dedc>ag a4aga<cc4> a4aga<ee4>");
     fue.synth = T("efx.reverb").appendTo(fue_dac);
     fue.synthdef = function(freq, opts) {
       var synth;
@@ -76,7 +76,7 @@
     };
     fue_dac.buddy("play", fue, "on");
     bass_dac = T("dac");
-    bass = T("mml", "t138 o2 l8 $ [aarr | ggrr]4 gg<cc>");
+    bass = T("mml", "t138 o1 l8 $ [aarr | ggrr]4 gg<cc>");
     bass.synth = T("+").appendTo(bass_dac);
     bass.synthdef = function(freq, opts) {
       var synth;
