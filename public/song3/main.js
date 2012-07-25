@@ -5,7 +5,7 @@
     var BD, HH, SD, SD2, buddies, desc, drum_dac, master, pad, pad_dac, pad_pattern;
     timbre.utils.exports("random.choice");
     pad_dac = T("rlpf", T("pulse", timbre.utils.bpm2hz(120, 4), 400, 1200).kr(), 0.95, 0.6);
-    pad_pattern = ["o4 l16 [a<a>a<a> a<a->a<a->]2", "o4 l16 [a<a>a<a> a<a->a<a->]2", "o5 l16 [d-ad-a d-a-d-a-]2"];
+    pad_pattern = ["o3 l16 [a<a>a<a> a<a->a<a->]2", "o3 l16 [a<a>a<a> a<a->a<a->]2", "o4 l16 [d-ad-a d-a-d-a-]2"];
     pad = T("mml", pad_pattern);
     pad.index = 0;
     pad.tnum1 = 0;
