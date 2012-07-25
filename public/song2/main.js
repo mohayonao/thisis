@@ -63,7 +63,7 @@
     chord_dac.buddy("play", chord, "on");
     chord_dac.buddy("pause", chord, "off");
     bass_dac = T("dac");
-    bass = T("mml", "l8 q6 o2 $ [a<a>a<a16a16> f16<ff16>f<f> g<g>g<g16g16 | c<c16c16>>b<b>] c<c16c16>c<c>>");
+    bass = T("mml", "l8 q6 o1 $ [a<a>a<a16a16> f16<ff16>f<f> g<g>g<g16g16 | c<c16c16>>b<b>] c<c16c16>c<c>>");
     bass.synth = T("clip").appendTo(bass_dac);
     bass.synthdef = function(freq, opts) {
       var synth;
