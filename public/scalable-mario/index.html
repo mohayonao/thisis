@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>scalable-mario</title>
+    <link rel="stylesheet" href="/libs/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div class="well">
+      <h1 id="text">scalable-mario</h1>
+    </div>
+    <div class="container">
+      <form class="form-horizontal well">
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="scale">Scale</label>
+            <div class="controls">
+              <select id="scale" class="span4"></select>
+              <a id="random-scale" class="btn">random</a>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="tuning">Tuning</label>
+            <div class="controls">
+              <select id="tuning" class="span4"></select>
+              <a id="random-tuning" class="btn">random</a>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+      <a class="btn btn-small" href="javascript:void(0)" id="play"><i class="icon-play"></i> Play</a>
+      <a class="btn btn-small" href="javascript:void(0)" id="pause"><i class="icon-pause"></i> Pause</a>
+      <div id="desc" style="padding:20px 0px"></div>
+    </div>
+    <script type="text/javascript" src="/libs/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/libs/js/timbre.min.js"></script>
+    <script type="text/javascript" src="/libs/js/subcollider.min.js"></script>
+    <script type="text/javascript" src="/libs/js/footer.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+  </body>
+</html>
