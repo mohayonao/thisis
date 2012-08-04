@@ -2,6 +2,8 @@
 (function() {
 
   jQuery(function() {
+    "use strict";
+
     var $scale, $tuning, KV, baseRoot, baseScale, bass, bpm, buddies, calcFrequency, changeRootFreq, changeScale, changeTuning, desc, index, master, melo0, melo1, scales, sheet, tunings;
     master = T("efx.delay", 100, 0.4, 0.25);
     bpm = 104;
@@ -174,9 +176,25 @@
         $tuning.val(KV.tuning).change();
       }
       if (KV.autostart) {
-        return $("#play").click();
+        $("#play").click();
       }
     }
+    return $("#tweet").on("click", function() {
+      var baseurl, h, lis, scale_val, search, text, tuning_val, url, w, x, y;
+      scale_val = $("#scale").val();
+      tuning_val = $("#tuning").val();
+      w = 550;
+      h = 250;
+      x = Math.round(screen.width * 0.5 - w * 0.5);
+      y = Math.round(screen.height * 0.5 - h * 0.5);
+      baseurl = location.protocol + "//" + location.host + location.pathname;
+      text = "マリオの曲できた";
+      search = "scale=" + scale_val + "&tuning=" + tuning_val;
+      console.log(baseurl);
+      lis = ["http://twitter.com/share?lang=ja", "text=" + text, "url=" + encodeURIComponent("" + baseurl + "?" + search)];
+      url = lis.join("&");
+      return window.open(url, "intent", "width=" + w + ",height=" + h + ",left=" + x + ",top=" + y);
+    });
   });
 
 }).call(this);

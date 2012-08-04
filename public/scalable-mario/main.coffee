@@ -1,4 +1,5 @@
 jQuery ->
+    "use strict"
 
     master = T("efx.delay", 100, 0.4, 0.25)
 
@@ -141,7 +142,6 @@ jQuery ->
         _index   =  degree % @_degrees.length
         @ratios().blendAt(_index) * Math.pow(@octaveRatio(), octave)
 
-
     if location.search != ""
         KV = do ->
             KV = {}
@@ -153,3 +153,24 @@ jQuery ->
         if KV.scale  != "" then $scale .val(KV.scale ).change()
         if KV.tuning != "" then $tuning.val(KV.tuning).change()
         if KV.autostart    then $("#play").click()
+
+    $("#tweet").on "click", ->
+        scale_val  = $("#scale").val()
+        tuning_val = $("#tuning").val()
+
+        w = 550
+        h = 250
+        x = Math.round screen.width  * 0.5 - w * 0.5
+        y = Math.round screen.height * 0.5 - h * 0.5
+
+        baseurl = location.protocol + "//" + location.host + location.pathname;
+        text    = "マリオの曲できた"
+        search  = "scale=#{scale_val}&tuning=#{tuning_val}"
+        console.log baseurl
+        lis = [
+            "http://twitter.com/share?lang=ja",
+            "text=" + text,
+            "url=" + encodeURIComponent "#{baseurl}?#{search}"
+        ];
+        url = lis.join "&"
+        window.open url, "intent", "width=#{w},height=#{h},left=#{x},top=#{y}"

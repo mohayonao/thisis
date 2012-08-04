@@ -4,6 +4,12 @@
     <meta charset="utf-8">
     <title>scalable-mario</title>
     <link rel="stylesheet" href="/libs/css/bootstrap.min.css" />
+    <style type="text/css" media="screen">
+      .icon-tweet {
+        background: url('https://twitter.com/favicons/favicon.ico') 1px center no-repeat;
+        background-position-x: -1px;
+      }
+    </style>    
   </head>
   <body>
     <div class="well">
@@ -30,8 +36,13 @@
           </div>
         </fieldset>
       </form>
-      <a class="btn btn-small" href="javascript:void(0)" id="play"><i class="icon-play"></i> Play</a>
-      <a class="btn btn-small" href="javascript:void(0)" id="pause"><i class="icon-pause"></i> Pause</a>
+      <div>
+        <a class="btn btn-small" href="javascript:void(0)" id="play"><i class="icon-play"></i> Play</a>
+        <a class="btn btn-small" href="javascript:void(0)" id="pause"><i class="icon-pause"></i> Pause</a>
+        <!-- tweet button -->
+        <a class="btn btn-small" href="javascript:void(0)" id="tweet"><i class="icon-tweet"></i> Tweet</a>
+        <!-- /tweet button -->
+      </div>
       <div id="desc" style="padding:20px 0px"></div>
     </div>
     <script type="text/javascript" src="/libs/js/jquery.min.js"></script>
