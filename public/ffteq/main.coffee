@@ -35,6 +35,7 @@ jQuery ->
         @buffer = new Float32Array(@size)
         @index  = 0
         @
+    AcmeFFT.prototype = timbre.fn.buildPrototype AcmeFFT,  {base:'ar-only'}
 
     AcmeFFT.prototype.setFile = (file)->
         @source.set({src:file}).load()
@@ -42,7 +43,6 @@ jQuery ->
 
     AcmeFFT.prototype.seq = (seq_id)->
         _ = @_
-
         if _.seq_id != seq_id
             _.seq_id = seq_id
 
@@ -124,8 +124,7 @@ jQuery ->
 
 
     $canvas = $("#canvas")
-    animate = ->
-        list = EQ_Params
+    $canvas.draw = (list)->
         w = $canvas.width()
         h = $canvas.height()
         context = $canvas.get(0).getContext "2d"
@@ -143,6 +142,8 @@ jQuery ->
             context.fillRect(x, h - y, dx, y)
         context.restore()
 
+    animate = ->
+        $canvas.draw EQ_Params
         requestAnimationFrame animate
 
     $canvas.get(0).width  = $canvas.width()
